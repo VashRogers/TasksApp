@@ -5,11 +5,11 @@ import backgroundImage from '../../assets/login.jpg'
 import commonStyles from '../commonStyles'
 
 const AuthWithHooks = () => {
-    const[ name, setName] = useState('');
-    const[ email, setEmail] = useState('');
-    const[ password, setPassword] = useState('');
-    const[ confirmPassword, setConfirmPassword] = useState('');
-    const[ stageNew, setStageNew] = useState(false)
+    const[ name, setName ] = useState('');
+    const[ email, setEmail ] = useState('');
+    const[ password, setPassword ] = useState('');
+    const[ confirmPassword, setConfirmPassword ] = useState('');
+    const[ stageNew, setStageNew ] = useState(false)
     // state = {
     //   name:'',
     //   email:'',
@@ -37,27 +37,27 @@ const AuthWithHooks = () => {
             {stageNew ? 'Crie sua conta' : 'Informe seus dados'}
           </Text>
           {stageNew &&
-              <TextInput 
+              <AuthInput 
               placeholder='Nome'
               value={name} style={styles.input}
               onChangeText={name => setName(name)}
             />
 
           }
-          <TextInput 
+           <AuthInput icon='at' 
             placeholder='E-mail'
             value={email} style={styles.input}
             onChangeText={email => setEmail(email)}
           />
-          <TextInput 
-            placeholder='Senha'
+          <AuthInput
+              icon='lock'
             value={password} style={styles.input}
             onChangeText={password => setPassword(password)}
             secureTextEntry={true}
           />
           {stageNew &&
-            <TextInput 
-            placeholder='Confirme a senha'
+            <AuthInput
+            icon='asterisk'
             value={confirmPassword} style={styles.input}
             onChangeText={confirmPassword => setConfirmPassword(confirmPassword)}
             secureTextEntry={true}
@@ -118,13 +118,14 @@ const styles = StyleSheet.create({
   input:{
     marginTop:10,
     backgroundColor:'white',
-    padding: Platform.OS == 'ios' ? 15 : 10
+    // padding: Platform.OS == 'ios' ? 15 : 10
   },
   button:{
     backgroundColor:'#080',
     marginTop:10,
     padding:10,
     alignItems:'center',
+    borderRadius:5,
   },
   buttonText:{
     color:'white',
