@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { ImageBackground, Text, View, StyleSheet, TextInput, TouchableOpacity, Platform, Alert } from 'react-native'
+import axios from 'axios'
 
 import backgroundImage from '../../assets/login.jpg'
 import commonStyles from '../commonStyles'
+import AuthInput from '../components/AuthInput'
 
 import { server, showError, showSuccess } from '../common'
+import { clickProps } from 'react-native-web/dist/cjs/modules/forwardedProps'
 
-const AuthWithHooks = () => {
+const AuthWithHooks = (props) => {
     const[ name, setName ] = useState('');
     const[ email, setEmail ] = useState('');
     const[ password, setPassword ] = useState('');
@@ -24,7 +27,7 @@ const AuthWithHooks = () => {
       if(stageNew){
         signup();
       } else{
-        Alert.alert('Sucesso!', 'Logar')
+        signin()
       }
     }
 
@@ -45,6 +48,23 @@ const AuthWithHooks = () => {
       }
     }
 
+    const signin = async () => {
+      try{
+        const res = await axios.post(`${server}/signin`, {
+          email:email,
+          password:password,
+        })
+        axios.defaults.headers.common['Authorization'] = `bearer ${res.data.token}`
+        // console.log( axios.defaults.headers.common['Authorization'])
+        props.navigation.reset({
+          routes: [{name:'Home'}]
+        })
+      }
+      catch(e){
+        showError(e)
+      }
+    }
+
     return(
       <ImageBackground source={backgroundImage}
         style={styles.background}
@@ -56,7 +76,8 @@ const AuthWithHooks = () => {
             {stageNew ? 'Crie sua conta' : 'Informe seus dados'}
           </Text>
           {stageNew &&
-              <AuthInput 
+              <AuthInput
+              icon='user' 
               placeholder='Nome'
               value={name} style={styles.input}
               onChangeText={name => setName(name)}
@@ -70,6 +91,7 @@ const AuthWithHooks = () => {
           />
           <AuthInput
               icon='lock'
+              placeholder='Senha'
             value={password} style={styles.input}
             onChangeText={password => setPassword(password)}
             secureTextEntry={true}
@@ -77,6 +99,7 @@ const AuthWithHooks = () => {
           {stageNew &&
             <AuthInput
             icon='asterisk'
+            placeholder='Confirme a senha'
             value={confirmPassword} style={styles.input}
             onChangeText={confirmPassword => setConfirmPassword(confirmPassword)}
             secureTextEntry={true}
