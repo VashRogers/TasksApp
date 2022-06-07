@@ -4,6 +4,8 @@ import { ImageBackground, Text, View, StyleSheet, TextInput, TouchableOpacity, P
 import backgroundImage from '../../assets/login.jpg'
 import commonStyles from '../commonStyles'
 
+import { server, showError, showSuccess } from '../common'
+
 const AuthWithHooks = () => {
     const[ name, setName ] = useState('');
     const[ email, setEmail ] = useState('');
@@ -20,9 +22,26 @@ const AuthWithHooks = () => {
 
     const signinOrsignup = () => {
       if(stageNew){
-        Alert.alert('Sucesso!', 'Criar Conta')
+        signup();
       } else{
         Alert.alert('Sucesso!', 'Logar')
+      }
+    }
+
+    const signup = async () => {
+      try{
+        await axios.post(`${server}/signup`, {
+          name: name,
+          email: email,
+          password: password,
+          confirmPassword: confirmPassword
+        })
+
+        showSuccess('Usuário Cadastrado.');
+        setStageNew(false)
+      }
+      catch (e) {
+        showError(e)
       }
     }
 
