@@ -49,6 +49,15 @@ export default class AddTask extends Component {
     return datePicker
   }
 
+  getColor = () => {
+    switch(this.props.daysAhead){
+      case 0: return commonStyles.colors.today;
+      case 1: return commonStyles.colors.tomorrow;
+      case 7: return commonStyles.colors.week;
+      default: return commonStyles.colors.month;
+    }
+  }
+
   render(){
     return(
     <Modal transparent={true}

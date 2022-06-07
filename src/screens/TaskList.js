@@ -10,7 +10,12 @@ import { server, showError } from '../common';
 import Task from '../components/Task';
 import AddTask from './AddTask';
 import commonStyles from '../commonStyles'
+
 import todayImage from '../../assets/today.jpg'
+import tomorrowImage from '../../assets/tomorrow.jpg'
+import weekImage from '../../assets/week.jpg'
+import monthImage from '../../assets/month.jpg'
+
 
 
 const initialState = {
@@ -22,6 +27,8 @@ const initialState = {
 
 export default class TaskList extends Component{
 
+
+  
   state = {
     
     ...initialState
@@ -35,11 +42,15 @@ export default class TaskList extends Component{
       showDoneTasks: savedState.showDoneTasks
     }, this.filterTasks)
     this.loadTasks()
+    // console.log('-----------TOK3N---------------')
+    // console.log(axios.defaults.headers.common['Authorization'])
   }
 
   loadTasks = async() => {
     try{
-      const maxDate = moment().format('YYYY-MM-DD 23:59:59')
+      const maxDate = moment()
+                        .add({ days: this.props.daysAhead })
+                        .format('YYYY-MM-DD 23:59:59')
       const res = await axios.get(`${server}/tasks?date=${maxDate}`)
       this.setState({ tasks:res.data }, this.filterTasks)
     }
@@ -118,6 +129,24 @@ export default class TaskList extends Component{
     // this.setState({ tasks }, this.filterTasks)
   }
 
+  getImage = () => {
+    switch(this.props.daysAhead){
+      case 0: return todayImage;
+      case 1: return tomorrowImage;
+      case 7: return weekImage;
+      default: return monthImage;
+    }
+  }
+
+  getColor = () => {
+    switch(this.props.daysAhead){
+      case 0: return commonStyles.colors.today;
+      case 1: return commonStyles.colors.tomorrow;
+      case 7: return commonStyles.colors.week;
+      default: return commonStyles.colors.month;
+    }
+  }
+
   render(){
     
     const today = moment().locale('pt-br').format('ddd, D [de] MMMM [de] YYYY')
@@ -129,8 +158,16 @@ export default class TaskList extends Component{
           onCancel={() => this.setState({ showAddTask:false })}
           onSave={this.addTask}
         />
-        <ImageBackground source={todayImage} style={styles.background}>
+        <ImageBackground source={this.getImage()} style={styles.background}>
           <View style={styles.iconBar}>
+            <TouchableOpacity 
+              onPress={() => {
+                this.props.navigation.openDrawer()
+              }}
+            >
+              <FontAwesome name='bars' size={24} color={commonStyles.colors.secondary} />
+            </TouchableOpacity>
+            
             <TouchableOpacity 
               onPress={this.toggleFilter}
             >
@@ -140,7 +177,7 @@ export default class TaskList extends Component{
           </View>
           
           <View style={styles.titleBar}>
-            <Text style={styles.title}>Hoje</Text>
+            <Text style={styles.title}>{this.props.title}</Text>
             <Text style={styles.subtitle}>{today}</Text>
           </View>
         </ImageBackground>
@@ -151,7 +188,7 @@ export default class TaskList extends Component{
             renderItem={({item}) => <Task {...item} onToggleTask={this.toggleTask} onDelete={this.deleTask} />}
           />
         </View>
-        <TouchableOpacity style={styles.addButton}
+        <TouchableOpacity style={[styles.addButton, { backgroundColor:this.getColor() }]}
           onPress={()=> this.setState({ showAddTask: true })}
           activeOpacity={0.7}
         >
@@ -195,7 +232,7 @@ const styles = StyleSheet.create({
   iconBar:{
     flexDirection:'row',
     marginHorizontal:20,
-    justifyContent:'flex-end',
+    justifyContent:'space-between',
     marginTop: Platform.OS === 'ios' ? 40 : 30,
 
   },
