@@ -47,11 +47,10 @@ const AuthWithHooks = (props) => {
           email:email,
           password:password,
         })
+        // console.log(res.data.token)
         axios.defaults.headers.common['Authorization'] = `bearer ${res.data.token}`
         // console.log( axios.defaults.headers.common['Authorization'])
-        props.navigation.reset({
-          routes: [{name:'Home'}]
-        })
+        props.navigation.navigate('Home', res.data);
       }
       catch(e){
         showError(e)
