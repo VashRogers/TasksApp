@@ -11,8 +11,8 @@ import { clickProps } from 'react-native-web/dist/cjs/modules/forwardedProps'
 
 const AuthWithHooks = (props) => {
     const[ name, setName ] = useState('');
-    const[ email, setEmail ] = useState('');
-    const[ password, setPassword ] = useState('');
+    const[ email, setEmail ] = useState('elidabruno@gmail.com');//TO DO: Deixar o estado como string vazia após arrumar o codigo
+    const[ password, setPassword ] = useState('102030');//TO DO: Deixar o estado como string vazia após arrumar o codigo
     const[ confirmPassword, setConfirmPassword ] = useState('');
     const[ stageNew, setStageNew ] = useState(false)
 
@@ -58,7 +58,8 @@ const AuthWithHooks = (props) => {
       }
     }
 
-    const validations = []
+    const form = () => {
+      const validations = []
       validations.push(email && email.includes('@'))
       validations.push(password && password.length >= 6)
       if(stageNew){
@@ -68,6 +69,10 @@ const AuthWithHooks = (props) => {
       }
 
       const validForm = validations.reduce((t, a) => t && a)
+      return validForm
+    }
+
+    
 
     return(
       <ImageBackground source={backgroundImage}
@@ -110,10 +115,10 @@ const AuthWithHooks = (props) => {
           />
           }
           <TouchableOpacity
-            disabled={!validForm} 
+            disabled={!form} 
             onPress={signinOrsignup}
           >
-            <View style={[styles.button, validForm ? {} : { backgroundColor:'gray' }]}>
+            <View style={[styles.button, form() ? {} : { backgroundColor:'gray' }]}>
               <Text style={styles.buttonText}>
                 {stageNew ? 'Registrar' : 'Entrar'}
               </Text>

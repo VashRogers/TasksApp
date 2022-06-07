@@ -11,8 +11,8 @@ export default class Auth extends Component {
 
     state = {
       name:'',
-      email:'',
-      password:'',
+      email:'elidabruno@gmail.com',//TO DO: Deixar o estado como string vazia após arrumar o codigo
+      password:'102030',//TO DO: Deixar o estado como string vazia após arrumar o codigo
       confirmPassword:'',
       stageNew: false
     }
