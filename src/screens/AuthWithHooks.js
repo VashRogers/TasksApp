@@ -15,13 +15,6 @@ const AuthWithHooks = (props) => {
     const[ password, setPassword ] = useState('');
     const[ confirmPassword, setConfirmPassword ] = useState('');
     const[ stageNew, setStageNew ] = useState(false)
-    // state = {
-    //   name:'',
-    //   email:'',
-    //   password:'',
-    //   confirmPassword:'',
-    //   stageNew: false
-    // }
 
     const signinOrsignup = () => {
       if(stageNew){
@@ -65,6 +58,17 @@ const AuthWithHooks = (props) => {
       }
     }
 
+    const validations = []
+      validations.push(email && email.includes('@'))
+      validations.push(password && password.length >= 6)
+      if(stageNew){
+        validations.push(name.trim().length >=3 )
+        validations.push(confirmPassword)
+        validations.push(password === confirmPassword)
+      }
+
+      const validForm = validations.reduce((t, a) => t && a)
+
     return(
       <ImageBackground source={backgroundImage}
         style={styles.background}
@@ -105,10 +109,11 @@ const AuthWithHooks = (props) => {
             secureTextEntry={true}
           />
           }
-          <TouchableOpacity 
+          <TouchableOpacity
+            disabled={!validForm} 
             onPress={signinOrsignup}
           >
-            <View style={styles.button}>
+            <View style={[styles.button, validForm ? {} : { backgroundColor:'gray' }]}>
               <Text style={styles.buttonText}>
                 {stageNew ? 'Registrar' : 'Entrar'}
               </Text>
