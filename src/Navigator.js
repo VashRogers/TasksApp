@@ -8,6 +8,9 @@ import Auth from './screens/Auth';
 import AuthWithHooks from './screens/AuthWithHooks';
 import TaskList from './screens/TaskList';
 import Menu from './screens/Menu';
+import AuthOrApp from './screens/AuthOrApp';
+import AuthOrAppWithHooks from './screens/AuthOrAppWithHooks';
+
 import commonStyles from './commonStyles';
 
 const Stack = createNativeStackNavigator();
@@ -49,7 +52,8 @@ const DrawerNavigator = (props) => {
 
 const StackNavigator = () => {
     return(
-        <Stack.Navigator initialRouteName='Auth' screenOptions={{ headerShown:false }}>
+        <Stack.Navigator initialRouteName='AuthOrApp' screenOptions={{ headerShown:false }}>
+            <Stack.Screen name='AuthOrApp' component={AuthOrAppWithHooks} />
             <Stack.Screen name='Auth' component={AuthWithHooks} />
             <Stack.Screen name='Home' component={DrawerNavigator}/>
         </Stack.Navigator>

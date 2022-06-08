@@ -20,11 +20,12 @@ export default (props) => {
                 index: 0,
                 routes:[
                     {
-                        name: 'Auth',
+                        name: 'AuthOrApp',
                     }
                 ]
             })
         )
+        
     }
 
     return(
@@ -82,13 +83,13 @@ const styles = StyleSheet.create({
     },
     name: {
         fontSize: 20,
-        color: commonStyles.colors.mainText,
+        color: 'black',
         marginBottom: 5,
         textAlign:'center',
     },
     email: {
         fontSize: 15,
-        color: commonStyles.colors.subText,
+        color: 'black',
         marginBottom: 10,
         textAlign:'center',
     },

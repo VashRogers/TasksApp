@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ImageBackground, Text, View, StyleSheet, TextInput, TouchableOpacity, Platform, Alert } from 'react-native'
 import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import backgroundImage from '../../assets/login.jpg'
 import commonStyles from '../commonStyles'
@@ -11,8 +12,8 @@ import { clickProps } from 'react-native-web/dist/cjs/modules/forwardedProps'
 
 const AuthWithHooks = (props) => {
     const[ name, setName ] = useState('');
-    const[ email, setEmail ] = useState('elidabruno@gmail.com');//TO DO: Deixar o estado como string vazia após arrumar o codigo
-    const[ password, setPassword ] = useState('102030');//TO DO: Deixar o estado como string vazia após arrumar o codigo
+    const[ email, setEmail ] = useState('');
+    const[ password, setPassword ] = useState('');
     const[ confirmPassword, setConfirmPassword ] = useState('');
     const[ stageNew, setStageNew ] = useState(false)
 
@@ -47,6 +48,7 @@ const AuthWithHooks = (props) => {
           email:email,
           password:password,
         })
+        AsyncStorage.setItem('userData', JSON.stringify(res.data))
         // console.log(res.data.token)
         axios.defaults.headers.common['Authorization'] = `bearer ${res.data.token}`
         // console.log( axios.defaults.headers.common['Authorization'])
